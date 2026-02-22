@@ -1,6 +1,5 @@
 package com.gamewolf.usbback.controller;
 
-import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
