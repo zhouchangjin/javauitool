@@ -1,0 +1,2 @@
+set path=D:\Dev\JDK\openjdk-20.0.2_windows-x64_bin\jdk-20.0.2\bin;%path%
+jpackage.exe --type app-image --name usbback  -m com.gamewolf.usbback/com.gamewolf.usbback.App --runtime-image ./target/image  --dest ./target/out
