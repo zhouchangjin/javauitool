@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gamewolf.usbback.controller.task.ChecksumTask;
+import com.gamewolf.usbback.controller.task.ChecksumValidateTask;
 import com.gamewolf.usbback.util.ChecksumUtil;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -59,45 +62,37 @@ public class CheckController {
 		String type=checkTypeCombo.getValue();
 		String folder=folderTextField.getText();
 		System.out.println(type+"=="+folder);
-		
-		ChecksumTask task=new ChecksumTask(type, folder, logs);
-		Thread t=new Thread(task);
-		t.start();
-		//checkFolder(type,folder);
-		
-	}
-
-	private void checkFolder(String type, String folderPath) {
-		File folder=new File(folderPath);
-		File[] files=folder.listFiles();
-		List<String> checksum=new ArrayList<>();
-		for(File file:files) {
-			String path=file.getAbsolutePath();
-			if(file.isDirectory()) {
-				checkFolder(type,path);
-			}else if(path.endsWith("gw_chksum")) {
-				continue;
-			}else {
-				try {
-					String checksumStr=ChecksumUtil.getChecksum(path,type);//ChecksumUtil.getChecksum(path,type);
-					String line=path+","+checksumStr;
-					checksum.add(line);
-					System.out.println(line);
-				} catch (Exception e) {
-					e.printStackTrace();
-				} 
-			}
-		}
-		String path=folderPath+"/folder."+type+".gw_chksum";
-		try(BufferedWriter bw=new BufferedWriter(new FileWriter(path))){
-			for(String line:checksum) {
-				bw.append(line);
-				bw.newLine();
-				bw.flush();
-			}
-		}catch(Exception e) {
+		String checkFile=folder+"/folder."+type+".gw_chksum";
+		System.out.println(checkFile);
+		File folderCheck=new File(checkFile);
+		if(folderCheck.exists()) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("错误");
+			alert.setHeaderText("已有旧的校验文件");
+			alert.setContentText("已有旧的校验文件");
+			alert.showAndWait();
 			
+			return;
+		}else {
+			ChecksumTask task=new ChecksumTask(type, folder, logs);
+			Thread t=new Thread(task);
+			t.start();
 		}
+		
 	}
-
+	
+	@FXML
+	void checkFile() {
+		logs.clear();
+		String type=checkTypeCombo.getValue();
+		String folder=folderTextField.getText();
+		String checkFile=folder+"/folder."+type+".gw_chksum";
+		File folderCheck=new File(checkFile);
+		if(folderCheck.exists()) {
+			ChecksumValidateTask task=new ChecksumValidateTask(type, folder, logs);
+			Thread t=new Thread(task);
+			t.start();
+		}
+		
+	}
 }
