@@ -1,6 +1,7 @@
 package com.gamewolf.examtool.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -29,10 +30,13 @@ public class TestController {
 	
 	int cnt;
 	
-	
+    List<FillPart> current;
+    
+    List<TextField> currentTextField;
 	
 	@FXML
 	void initialize() {
+		currentTextField=new ArrayList<TextField>();
 		System.out.println("helloworld");
 		
 		String path=getClass().getResource("/题库.txt").getPath();
@@ -41,6 +45,7 @@ public class TestController {
 		cnt=test.getCnt();
 		int rnd=new Random().nextInt(cnt);
 		List<FillPart> t=test.getTest(rnd);
+		current=t;
 		for(FillPart f:t) {
 			if(f.isFillPart()) {
 				testText.getChildren().add(new Text("____________"));
@@ -49,6 +54,7 @@ public class TestController {
 			}
 			
 		}
+		genAnswerField(t);
 		
 	}
 	
@@ -60,8 +66,10 @@ public class TestController {
 				cnt++;
 				HBox hbox=new HBox();
 				hbox.getChildren().add(new Label(cnt+":"));
-				hbox.getChildren().add(new TextField());
-				hbox.setPadding(new Insets(20, 0, 0, 0));
+				TextField tf=new TextField();
+				currentTextField.add(tf);
+				hbox.getChildren().add(tf);
+				hbox.setPadding(new Insets(10, 0, 0, 0));
 				answPane.getChildren().add(hbox);
 			}
 		}
@@ -72,10 +80,13 @@ public class TestController {
 	void nextTest() {
 		System.out.println("next");
 		
-		testText.getChildren().clear();
+		checkAnswer(current);
 		
+		currentTextField.clear();
+		testText.getChildren().clear();
 		int rnd=new Random().nextInt(cnt);
 		List<FillPart> t=test.getTest(rnd);
+		current=t;
 		for(FillPart f:t) {
 			if(f.isFillPart()) {
 				testText.getChildren().add(new Text("____________"));
@@ -88,6 +99,23 @@ public class TestController {
 		genAnswerField(t);
 	}
 	
+	private void checkAnswer(List<FillPart> current2) {
+		
+		List<String> correctAnswer=new ArrayList<String>();
+		for(FillPart f:current2) {
+			if(f.isFillPart()) {
+				correctAnswer.add(f.getText());
+			}
+		}
+		for(int i=0;i<currentTextField.size();i++) {
+			String answer=currentTextField.get(i).getText();
+			System.out.print(answer+":"+correctAnswer.get(i));
+			System.out.print(answer.equals(correctAnswer.get(i))?"\033[32m正确":"\033[31m错误");
+			System.out.println("\033[30m");
+		}
+		
+	}
+
 	@FXML
 	void preTest() {
 		System.out.println("previous");
