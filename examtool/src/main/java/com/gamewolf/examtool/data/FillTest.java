@@ -3,6 +3,8 @@ package com.gamewolf.examtool.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.text.Text;
+
 public class FillTest {
 	
 	public List<List<FillPart>> tests;
@@ -37,6 +39,21 @@ public class FillTest {
 	
 	public List<List<FillPart>> getAll(){
 		return tests;
+	}
+
+	public String toTestString(int i) {
+		// TODO Auto-generated method stub
+		StringBuffer sb=new StringBuffer();
+		var t=tests.get(i);
+		for(FillPart f:t) {
+			if(f.isFillPart()) {
+				sb.append("_____________");
+			}else {
+				sb.append(f.getText());
+			}
+			
+		}
+		return sb.toString();
 	}
 	
 

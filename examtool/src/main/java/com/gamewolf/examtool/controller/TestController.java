@@ -156,6 +156,7 @@ public class TestController {
 		}
 		pos=0;
 		choose(0);
+		ExamUtil.genWord(test, "d:/考试题。docx");
 	}
 
 }
