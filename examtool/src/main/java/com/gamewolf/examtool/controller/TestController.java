@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.gamewolf.examtool.data.DataTool;
 import com.gamewolf.examtool.data.FillPart;
@@ -82,21 +83,9 @@ public class TestController {
 		
 		checkAnswer(current);
 		
-		currentTextField.clear();
-		testText.getChildren().clear();
+
 		int rnd=new Random().nextInt(cnt);
-		List<FillPart> t=test.getTest(rnd);
-		current=t;
-		for(FillPart f:t) {
-			if(f.isFillPart()) {
-				testText.getChildren().add(new Text("____________"));
-			}else {
-				testText.getChildren().add(new Text(f.getText()));
-			}
-			
-		}
-		
-		genAnswerField(t);
+		choose(rnd);
 	}
 	
 	private void checkAnswer(List<FillPart> current2) {
@@ -107,6 +96,8 @@ public class TestController {
 				correctAnswer.add(f.getText());
 			}
 		}
+		String or=current2.stream().map(e->e.getText()).collect(Collectors.joining(""));
+		System.out.println(or);
 		for(int i=0;i<currentTextField.size();i++) {
 			String answer=currentTextField.get(i).getText();
 			System.out.print(answer+":"+correctAnswer.get(i));
@@ -119,6 +110,24 @@ public class TestController {
 	@FXML
 	void preTest() {
 		System.out.println("previous");
+	}
+
+	public void choose(int testNo) {
+		// TODO Auto-generated method stub
+		currentTextField.clear();
+		testText.getChildren().clear();
+		List<FillPart> t=test.getTest(testNo);
+		current=t;
+		for(FillPart f:t) {
+			if(f.isFillPart()) {
+				testText.getChildren().add(new Text("____________"));
+			}else {
+				testText.getChildren().add(new Text(f.getText()));
+			}
+			
+		}
+		
+		genAnswerField(t);
 	}
 
 }

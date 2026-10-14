@@ -45,8 +45,8 @@ public class DataTool {
 	        // 循环查找所有匹配项
 	        while (matcher.find()) {
 	            String content = matcher.group(1);
-	            int front=cur.indexOf(content);
-	            String frontStr=cur.substring(0,front);
+	            int front=cur.indexOf("["+content);
+	            String frontStr=cur.substring(0,front+1);
 	            if(!frontStr.isEmpty()) {
 	            	FillPart f=new FillPart();
 	            	f.setFillPart(false);
@@ -57,7 +57,7 @@ public class DataTool {
 	            f.setFillPart(true);
 	            f.setText(content);
 	            l.add(f);
-	            cur=cur.substring(front+content.length());
+	            cur=cur.substring(front+1+content.length());
 	        }
 	        if(!cur.isEmpty()) {
 	        	FillPart f=new FillPart();

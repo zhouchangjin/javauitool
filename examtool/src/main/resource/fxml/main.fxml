@@ -39,7 +39,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gamewolf.examtool.controller.MainController">
+<VBox prefHeight="640.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gamewolf.examtool.controller.MainController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -47,6 +47,7 @@
           <items>
             <MenuItem mnemonicParsing="false" onAction="#newTest" text="开始测试" />
             <MenuItem mnemonicParsing="false" text="打开测试文件" />
+            <MenuItem mnemonicParsing="false" onAction="#inputTestNo" text="输入测试题目" />
             <MenuItem mnemonicParsing="false" text="Quit" />
           </items>
         </Menu>
