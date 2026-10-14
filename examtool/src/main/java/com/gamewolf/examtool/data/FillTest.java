@@ -23,5 +23,21 @@ public class FillTest {
 		return tests.size();
 	}
 	
+	public void clear() {
+		tests.clear();
+	}
+	
+	public void init(List<List<FillPart>> all) {
+		tests.addAll(all);
+	}
+	
+	public void init(FillTest other) {
+		init(other.getAll());
+	}
+	
+	public List<List<FillPart>> getAll(){
+		return tests;
+	}
+	
 
 }

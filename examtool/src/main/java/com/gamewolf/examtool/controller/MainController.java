@@ -40,6 +40,12 @@ public class MainController {
 	 }
 	 
 	 @FXML
+	 private void examMode(ActionEvent event) {
+		 System.out.println("=======开始考试============");
+		 testController.examGen();
+	 }
+	 
+	 @FXML
 	 private void inputTestNo(ActionEvent event) {
 		 System.out.println("======click=d============");
 		TextInputDialog textInputDialog=new TextInputDialog();

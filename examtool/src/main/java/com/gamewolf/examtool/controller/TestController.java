@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.gamewolf.examtool.data.DataTool;
+import com.gamewolf.examtool.data.ExamUtil;
 import com.gamewolf.examtool.data.FillPart;
 import com.gamewolf.examtool.data.FillTest;
 
@@ -23,6 +24,8 @@ public class TestController {
 	
 	FillTest test;
 	
+	FillTest testDb;
+	
 	@FXML
 	TextFlow testText;
 	
@@ -34,6 +37,10 @@ public class TestController {
     List<FillPart> current;
     
     List<TextField> currentTextField;
+    
+    boolean randMode=true;
+    
+    int pos=0;
 	
 	@FXML
 	void initialize() {
@@ -42,7 +49,9 @@ public class TestController {
 		
 		String path=getClass().getResource("/题库.txt").getPath();
 		
-		test=DataTool.read(path);
+		testDb=DataTool.read(path);
+		test=new FillTest();
+		test.init(testDb);
 		cnt=test.getCnt();
 		int rnd=new Random().nextInt(cnt);
 		List<FillPart> t=test.getTest(rnd);
@@ -83,9 +92,14 @@ public class TestController {
 		
 		checkAnswer(current);
 		
-
-		int rnd=new Random().nextInt(cnt);
-		choose(rnd);
+		if(randMode) {
+			int rnd=new Random().nextInt(cnt);
+			choose(rnd);
+		}else {
+			pos++;
+			choose(pos);
+		}
+		
 	}
 	
 	private void checkAnswer(List<FillPart> current2) {
@@ -128,6 +142,20 @@ public class TestController {
 		}
 		
 		genAnswerField(t);
+	}
+
+	public void examGen() {
+		randMode=false;
+		test.clear();
+		int n=testDb.getCnt();
+		int m=n>10?10:n;
+		List<Integer> testNos=ExamUtil.pickByShuffle(n, m);
+		for(Integer i:testNos) {
+			var t=testDb.getTest(i);
+			test.addTest(t);
+		}
+		pos=0;
+		choose(0);
 	}
 
 }

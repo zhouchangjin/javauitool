@@ -46,6 +46,7 @@
         <Menu mnemonicParsing="false" text="File">
           <items>
             <MenuItem mnemonicParsing="false" onAction="#newTest" text="开始测试" />
+            <MenuItem mnemonicParsing="false" onAction="#examMode" text="生成试卷" />
             <MenuItem mnemonicParsing="false" text="打开测试文件" />
             <MenuItem mnemonicParsing="false" onAction="#inputTestNo" text="输入测试题目" />
             <MenuItem mnemonicParsing="false" text="Quit" />
