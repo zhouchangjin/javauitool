@@ -138,12 +138,18 @@ public class TestController {
 				correctAnswer.add(f.getText());
 			}
 		}
-		String or=current2.stream().map(e->e.getText()).collect(Collectors.joining(""));
+		String or=current2.stream().map(e->{
+			if(e.isFillPart()){
+				return "\033[32m"+e.getText();
+			}else{
+				return "\033[36m"+e.getText();
+			}
+		}).collect(Collectors.joining(""));
 		System.out.println("\033[36m"+or);
 		for(int i=0;i<currentTextField.size();i++) {
 			String answer=currentTextField.get(i).getText();
 			System.out.print(answer+":"+correctAnswer.get(i));
-			System.out.print(answer.equals(correctAnswer.get(i))?"\033[32m正确":"\033[31m错误");
+			System.out.print(answer.equals(correctAnswer.get(i))?"\033[32m 正确":"\033[31m 错误");
 			System.out.println("\033[36m");
 		}
 		
