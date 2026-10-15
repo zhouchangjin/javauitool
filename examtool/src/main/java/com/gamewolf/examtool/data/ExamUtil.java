@@ -27,7 +27,7 @@ public class ExamUtil {
             // 2. 添加标题
             addTitle(document, "测试题", 1);
             for(int i=0;i<test.getCnt();i++) {
-            	String testSTr=test.toTestString(i);
+            	String testSTr="第"+(i+1)+"题：  "+test.toTestString(i);
 
                 addParagraph(document, testSTr, false, false, "000000");
             }
@@ -79,6 +79,7 @@ public class ExamUtil {
             run.setColor(colorHex);
         }
         run.setFontSize(12);
+        run.addCarriageReturn();
     }
 
 }
