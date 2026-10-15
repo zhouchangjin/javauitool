@@ -1,5 +1,6 @@
 package com.gamewolf.examtool.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 
 public class MainController {
 	
@@ -29,6 +31,17 @@ public class MainController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@FXML
+	private void openFile(ActionEvent event) {
+		System.out.println("======openFile=============");
+		contentPane.getChildren().clear();
+
+		FileChooser fileChooser=new FileChooser();
+		File file=fileChooser.showOpenDialog(null);
+		testController.loadFile(file.getAbsoluteFile().getPath());
+		contentPane.getChildren().add(testPane);
 	}
 	
 	 @FXML
