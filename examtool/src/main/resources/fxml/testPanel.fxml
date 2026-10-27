@@ -24,8 +24,8 @@
             </ScrollPane>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#preTest" prefHeight="23.0" prefWidth="99.0" text="上一题" />
-                  <Button mnemonicParsing="false" onAction="#nextTest" prefHeight="23.0" prefWidth="101.0" text="下一题">
+                  <Button fx:id="preButton" mnemonicParsing="false" onAction="#preTest" prefHeight="23.0" prefWidth="99.0" text="上一题" />
+                  <Button fx:id="nextButton" mnemonicParsing="false" onAction="#nextTest" prefHeight="23.0" prefWidth="101.0" text="下一题">
                      <HBox.margin>
                         <Insets left="30.0" />
                      </HBox.margin>

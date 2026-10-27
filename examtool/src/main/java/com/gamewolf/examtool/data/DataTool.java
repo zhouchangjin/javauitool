@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -14,26 +16,62 @@ public class DataTool {
 
 	public static FillTest read(String path) {
 		FillTest ft=new FillTest();
+		File file=new File(path);
+		Reader r=null;
 		
-		try {
-			BufferedReader br=new BufferedReader(new FileReader(new File(path)));
-			String line=null;
-			
-			while((line=br.readLine())!=null){
-				List<FillPart> parts=parseLine(line);
-				ft.addTest(parts);
+		if(!file.exists()) {
+			StringBuffer sb=new StringBuffer();
+			sb.append("中国古代四大发明是[造纸术],[印刷术],[火药],[指南针]");
+			r=new StringReader(sb.toString());
+		}else {
+			try {
+				r=new FileReader(new File(path));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}
+		
+		try (BufferedReader br=new BufferedReader(r);){
+			String line=null;
+			while((line=br.readLine())!=null){
+				if(line.contains("[")) {
+					//填空题
+					List<FillPart> parts=parseFileLine(line);
+					ft.addTest(parts);
+				}else if(line.startsWith("#Q#")) {
+					String title=line.substring(3);
+					///System.out.println("问题"+title);
+					QuestionAndAnswer qna=parseQnA(title,br);
+					ft.addQnA(qna);
+				}
+				
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return ft;
 	}
 
-	private static List<FillPart> parseLine(String input) {
+	private static QuestionAndAnswer parseQnA(String title, BufferedReader br) throws IOException {
+		// TODO Auto-generated method stub
+		QuestionAndAnswer q=new QuestionAndAnswer();
+		q.setQuestion(title);
+		String line=null;
+		while((line=br.readLine())!=null) {
+			if(line.startsWith("#F#")) {
+				break;
+			}else {
+				FillPart fillPart=new FillPart();
+				fillPart.setFillPart(true);
+				fillPart.setText(line);
+				q.addAnswer(fillPart);
+			}
+		}
+		return q;
+	}
+
+	private static List<FillPart> parseFileLine(String input) {
 			List<FillPart> l=new ArrayList<FillPart>();
 		 if (input == null || input.isEmpty()) {
 			 	return List.of();

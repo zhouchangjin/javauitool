@@ -65,7 +65,7 @@ public class MainController {
 		Optional<String> result=textInputDialog.showAndWait();
 		result.ifPresent(e->{
 			if(!e.isEmpty()) {
-				testController.choose(Integer.parseInt(e));
+				testController.choose(Integer.parseInt(e),TestController.TEST_FILLTEST);
 			}
 		});
 	 }

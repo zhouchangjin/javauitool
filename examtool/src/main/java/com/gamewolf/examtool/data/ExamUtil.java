@@ -20,18 +20,34 @@ public class ExamUtil {
         return list.subList(0, m);
     }
 	
-	public static void genWord(FillTest test,String wordPath) {
+	public static void genWord(FillTest test,String wordFolder,String wordName) {
 		XWPFDocument document = new XWPFDocument();
-
+		String wordPath=wordFolder+wordName+".docx";
         try {
             // 2. 添加标题
-            addTitle(document, "测试题", 1);
+            addTitle(document, wordName, 1);
+            
+            addParagraph(document, "第一部分 填空题", false, false, "000000");
+            
             for(int i=0;i<test.getCnt();i++) {
             	String testSTr="第"+(i+1)+"题：  "+test.toTestString(i);
 
                 addParagraph(document, testSTr, false, false, "000000");
             }
             
+            addParagraph(document, "第二部分 解答题", false, false, "000000");
+            for(int i=0;i<test.getQnATestCnt();i++) {
+            	String testSTr="第"+(i+1)+"题：  "+test.getQnA(i).getQuestion();
+            	 addParagraph(document, testSTr, false, false, "000000");
+            	QuestionAndAnswer q=test.getQnA(i);
+            	List<FillPart> p=q.getAnswer();
+            	int cnt=1;
+            	for(FillPart f:p) {
+            		addParagraph(document,cnt +")_________________________________",
+            				false, false, "000000");
+            		cnt++;
+            	}
+            }
 
             try (FileOutputStream out = new FileOutputStream(wordPath)) {
                 document.write(out);
@@ -81,5 +97,49 @@ public class ExamUtil {
         run.setFontSize(12);
         run.addCarriageReturn();
     }
+
+	public static void genAnswWord(FillTest test, String wordFolder,String wordName) {
+		XWPFDocument document = new XWPFDocument();
+		String wordPath=wordFolder+wordName+".docx";	
+        try {
+            // 2. 添加标题
+            addTitle(document, wordName, 1);
+            
+            addParagraph(document, "第一部分 填空题", false, false, "000000");
+            
+            for(int i=0;i<test.getCnt();i++) {
+            	String testSTr="第"+(i+1)+"题：  "+test.toAnswerAll(i);
+                addParagraph(document, testSTr, false, false, "000000");
+            }
+            addParagraph(document, "第二部分 解答题", false, false, "000000");
+            for(int i=0;i<test.getQnATestCnt();i++) {
+            	String testSTr="第"+(i+1)+"题：  "+test.getQnA(i).getQuestion();
+            	 addParagraph(document, testSTr, false, false, "000000");
+            	QuestionAndAnswer q=test.getQnA(i);
+            	List<FillPart> p=q.getAnswer();
+            	int cnt=1;
+            	for(FillPart f:p) {
+            		addParagraph(document,cnt +")"+f.getText(),
+            				false, false, "000000");
+            		cnt++;
+            	}
+            }
+
+            try (FileOutputStream out = new FileOutputStream(wordPath)) {
+                document.write(out);
+                System.out.println("Word 文档生成成功: " + wordPath);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                document.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+		
+	}
 
 }
